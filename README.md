@@ -1,2 +1,2 @@
-# groupe_8
+# groupe_1
 Initiation à github
