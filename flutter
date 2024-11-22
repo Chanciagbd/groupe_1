@@ -1,0 +1,225 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Exemple de Scroll et Navigation',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('New work'),
+        actions: [
+          
+          IconButton(
+            icon: Icon(Icons.account_circle), 
+            onPressed: () {
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+          ),
+        ],
+      ),
+     
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Catalogue'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/t2.jfif',
+              fit: BoxFit.cover,
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 1200, 
+                  color: Colors.black.withOpacity(0.5), 
+                  child: Center(
+                    child: Text(
+                      'Faites défiler vers le bas',
+                      style: TextStyle(fontSize: 24, color: Colors.white),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SecondPage()),
+                    );
+                  },
+                  child: Text('Notre Catalogue'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Catalogue'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+           
+            Navigator.pop(context);
+          },
+          child: Text('Retour à la  page d\'accueil'),
+        ),
+      ),
+    );
+  }
+}
+
+
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  // exemple
+  final String validUsername = "user";
+  final String validPassword = "password";
+
+ 
+  String errorMessage = '';
+
+  void _login() {
+   
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+   
+    if (username == validUsername && password == validPassword) {
+     
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      
+      setState(() {
+        errorMessage = 'Nom d\'utilisateur ou mot de passe incorrect';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Connexion'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Connexion',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+           
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Nom d\'utilisateur',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+           
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Mot de passe',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+           
+            if (errorMessage.isNotEmpty)
+              Text(
+                errorMessage,
+                style: TextStyle(color: Colors.red),
+              ),
+            SizedBox(height: 20),
+            
+            ElevatedButton(
+              onPressed: _login,
+              child: Text('Se connecter'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
